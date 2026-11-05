@@ -1,5 +1,5 @@
 
-name: Build My Gym Tracker APK
+name: Build My Gym Tracker 2.0 APK
 
 on:
   workflow_dispatch:
@@ -12,7 +12,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,14 +22,8 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Extract Android project
-        run: unzip MyGymTracker-Android-Project.zip -d source
-
-      - name: Fix Kotlin Compose plugin
-        run: |
-          sed -i '/id("org.jetbrains.kotlin.android") version "2.0.21" apply false/a\    id("org.jetbrains.kotlin.plugin.compose") version "2.0.21" apply false' source/build.gradle.kts
-          sed -i '/id("org.jetbrains.kotlin.android")/a\    id("org.jetbrains.kotlin.plugin.compose")' source/app/build.gradle.kts
-          sed -i '/composeOptions { kotlinCompilerExtensionVersion = "2.0.21" }/d' source/app/build.gradle.kts
+      - name: Extract project
+        run: unzip -o MyGymTracker-Android-Project-v2.0.zip -d source
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -45,5 +38,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: MyGymTracker-APK
+          name: MyGymTracker-2.0-APK
           path: source/app/build/outputs/apk/debug/app-debug.apk
